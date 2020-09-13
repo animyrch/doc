@@ -1,5 +1,5 @@
-import { DocContainer, DocTreeNode } from '../src/doc.ts';
-import { FsHandler } from '../src/fs.ts';
+import { DocContainer, DocTreeNode } from './docContainer.ts';
+import { FsHandler } from './fsHandler.ts';
 
 export class Doc {
   docContainer?: DocContainer;

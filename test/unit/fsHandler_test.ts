@@ -1,5 +1,5 @@
 import { assert, assertEquals } from "https://deno.land/std@0.64.0/testing/asserts.ts";
-import { FsHandler } from "../../src/fs.ts";
+import { FsHandler } from "../../dist/fsHandler.ts";
 
 let fsHandler:FsHandler;
 const testFolder:string = './test/mocks/testFolder/';

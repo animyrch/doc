@@ -1,5 +1,5 @@
 import { assert } from "https://deno.land/std@0.64.0/testing/asserts.ts";
-import { DocContainer, DocElementType } from "../../src/doc.ts";
+import { DocContainer, DocElementType } from "../../dist/docContainer.ts";
 
 const filePaths: string[] = [
   "parent/child/childschild/endFile.test.ts",
