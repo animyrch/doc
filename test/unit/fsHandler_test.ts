@@ -2,7 +2,7 @@ import { assert, assertEquals } from "https://deno.land/std@0.64.0/testing/asser
 import { FsHandler } from "../../dist/fsHandler.ts";
 
 let fsHandler:FsHandler;
-const testFolder:string = './test/mocks/testFolder/';
+const testFolder = './test/mocks/testFolder/';
 const given_fsIsInstantiated = () => {
   fsHandler = new FsHandler();
 }

@@ -43,7 +43,7 @@ import {DocTreeNode} from "../../dist/docContainer.ts";
 
 /** running doc on a folder should generate documentation for all files in that folder recursively */
 
-const testFolder: string = './test/mocks/testFolder/';
+const testFolder = './test/mocks/testFolder/';
 
 const given_testFolderHasMultipleFoldersAndMultipleFilesInEach = () => {
   const folder1 = 'folder1/';
