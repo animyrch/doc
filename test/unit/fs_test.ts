@@ -1,10 +1,10 @@
 import { assert, assertEquals } from "https://deno.land/std@0.64.0/testing/asserts.ts";
-import { Fs } from "../../src/fs.ts";
+import { FsHandler } from "../../src/fs.ts";
 
-let fsClass:Fs;
+let fsHandler:FsHandler;
 const testFolder:string = './test/mocks/testFolder/';
 const given_fsIsInstantiated = () => {
-  fsClass = new Fs();
+  fsHandler = new FsHandler();
 }
 
 const given_testFolderHasTwoFoldersAndTwoSubfoldersInOneOfThemAndOneFileInOneOfThem = () => {
@@ -24,7 +24,7 @@ const given_testFolderHasTwoFoldersAndTwoSubfoldersInOneOfThemAndOneFileInOneOfT
 }
 
 const when_scanFolder_isCalled = async () => {
-  await fsClass.scanFolder();
+  await fsHandler.scanFolder();
 }
 
 const then_fsShouldStoreTestFolderStructureForExistingFiles = () => {
@@ -32,7 +32,7 @@ const then_fsShouldStoreTestFolderStructureForExistingFiles = () => {
     'folder1/subfolder1/file.ts',
   ];
 
-  assertEquals(fsClass.folderStructure, expectedFolderStructure);
+  assertEquals(fsHandler.folderStructure, expectedFolderStructure);
 }
 
 const cleanup_scanFolderTest = async () => {
@@ -40,7 +40,7 @@ const cleanup_scanFolderTest = async () => {
 }
 
 Deno.test({
-  name: "FS/scanFolder",
+  name: "FsHandler/scanFolder",
   async fn() {
     given_fsIsInstantiated();
     given_testFolderHasTwoFoldersAndTwoSubfoldersInOneOfThemAndOneFileInOneOfThem();

@@ -1,9 +1,8 @@
 import { expandGlob } from "https://deno.land/std/fs/mod.ts";
 
-export class Fs {
+export class FsHandler {
 
-  folderStructure: Array<String> = [];
-
+  folderStructure: string[] = [];
 
   async scanFolder():Promise<void> {
     const searchRoot = '/test/mocks/testFolder/';
