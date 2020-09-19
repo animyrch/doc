@@ -45,6 +45,20 @@ import {DocTreeNode} from "../../dist/docContainer.ts";
 
 const testFolder = './test/mocks/testFolder/';
 
+
+Deno.test({
+  name: 'Doc',
+  async fn() {
+    given_testFolderHasMultipleFoldersAndMultipleFilesInEach();
+    const doc: Doc = await when_doc_isRunOnTestFolder();
+    then_doc_shouldGenerateDocumentationForAllTestFilesInside(doc);
+    cleanup_testFolder();
+  },
+  sanitizeResources: false,
+  sanitizeOps: false
+});
+
+
 const given_testFolderHasMultipleFoldersAndMultipleFilesInEach = () => {
   const folder1 = 'folder1/';
   const folder2 = 'folder2/';
@@ -84,6 +98,21 @@ const when_doc_isRunOnTestFolder = async () => {
 }
 
 const then_doc_shouldGenerateDocumentationForAllTestFilesInside = (doc: Doc) => {
+  then_doc_shoudCreateCorrectFolderStructure(doc);
+  then_doc_shouldCreateCorrectSectionsInEachFile(doc);
+  
+}
+
+const cleanup_testFolder = () => {
+  try{
+    Deno.removeSync(testFolder, {recursive: true});
+  } catch (err) {
+    console.log("could not remove folder");
+  }
+}
+
+const then_doc_shoudCreateCorrectFolderStructure = (doc: Doc) => {
+
   const docTree: DocTreeNode[] = doc.getDocTree();
   assert(typeof docTree !== 'undefined');
   assert(docTree.length === 2);
@@ -128,22 +157,6 @@ const then_doc_shouldGenerateDocumentationForAllTestFilesInside = (doc: Doc) => 
   assert(terminationFilesSubfolder23[1].value === 'file2.test.ts');
 }
 
-const cleanup_testFolder = () => {
-  try{
-    Deno.removeSync(testFolder, {recursive: true});
-  } catch (err) {
-    console.log("could not remove folder");
-  }
+const then_doc_shouldCreateCorrectSectionsInEachFile = (doc: Doc) => {
+  // TODO
 }
-
-Deno.test({
-  name: 'Doc',
-  async fn() {
-    given_testFolderHasMultipleFoldersAndMultipleFilesInEach();
-    const doc: Doc = await when_doc_isRunOnTestFolder();
-    then_doc_shouldGenerateDocumentationForAllTestFilesInside(doc);
-    cleanup_testFolder();
-  },
-  sanitizeResources: false,
-  sanitizeOps: false
-});

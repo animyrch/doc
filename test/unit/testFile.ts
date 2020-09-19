@@ -1,0 +1,3 @@
+Deno.test();
+
+Deno/test();
