@@ -1,5 +1,7 @@
 import { assert } from "https://deno.land/std@0.64.0/testing/asserts.ts";
-import { DocContainer, DocElementType } from "../../src/doc.ts";
+import { DocContainer, DocElementType } from "../../dist/docContainer.ts";
+
+// MOCK VALUES
 
 const filePaths: string[] = [
   "parent/child/childschild/endFile.test.ts",
@@ -7,21 +9,41 @@ const filePaths: string[] = [
   "parent2/secondChild/anotherFile.test.ts"
 ];
 
+class FsHandler {
+  folderStructure: string[] = filePaths;
+  async scanFolder(): Promise<void> {
+    return;
+  }
+}
+
+const fsHandlerMock = new FsHandler();
+
+// MOCKS END
+
 Deno.test({
   name: "DocContainer/constructor", 
-  fn () {
-    const doc: DocContainer = when_doc_isInitialisedWithFilePathsArray(filePaths);
-    then_doc_exposesDocTreeThatFollowsFilePaths(doc);
+  async fn () {
+    const doc: DocContainer = given_doc_isInitialised();
+    await when_populateDocTree_isCalled(doc);
+    // console.log(doc);
+    then_doc_parsesDocFolderStructureAndBuildsADocTreeThatFollowsFilePaths(doc);
   },
   sanitizeOps: false,
   sanitizeResources: false
 });
 
-const when_doc_isInitialisedWithFilePathsArray = (filePaths: string[]): DocContainer => {
-  return new DocContainer(filePaths);
+
+const given_doc_isInitialised = (): DocContainer => {
+  return new DocContainer(
+    fsHandlerMock
+  );
 }
 
-const then_doc_exposesDocTreeThatFollowsFilePaths = (doc: DocContainer): void => {
+const when_populateDocTree_isCalled = async (doc: DocContainer): Promise<void> => {
+  await doc.populateDocTree();
+}
+
+const then_doc_parsesDocFolderStructureAndBuildsADocTreeThatFollowsFilePaths = (doc: DocContainer): void => {
   then_docTree_propertyIsInitialised(doc);
   then_aRootElementIsCreatedForEachBeginningFolder(doc);
   then_intermediaryFoldersAreCreated(doc);

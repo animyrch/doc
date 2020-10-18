@@ -1,3 +1,5 @@
+import { FsHandler } from "./fsHandler.ts";
+
 export enum DocElementType {
   DocRoot = 'ROOT',
   DocFolder = 'FOLDER',
@@ -16,15 +18,25 @@ export interface DocTreeNode {
 
 export class DocContainer {
 
+  fsHandler: FsHandler;
+
   docTree: DocTreeNode[] = [];
   currentInsertionPoint: DocTreeNode[] = [];
-
-  constructor (filePaths: string[]) {
-    this._populateDocTree(filePaths);
+  
+  public static getInstance = (): DocContainer => {
+    return new DocContainer(
+      new FsHandler
+    );
   }
 
-  private _populateDocTree = (filePaths: string[]): void => {
-    filePaths.map(filePath => {
+  constructor (fsHandler: FsHandler) {
+    this.fsHandler = fsHandler;
+  }
+
+
+  public populateDocTree = async (): Promise<void> => {
+    await this.fsHandler.scanFolder();
+    this.fsHandler.folderStructure.map((filePath: string) => {
       const pathSegments: string[] = filePath.split('/');
       
       let nodeIndex: number = 0;

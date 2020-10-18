@@ -1,6 +1,7 @@
 import { assert } from "https://deno.land/std@0.64.0/testing/asserts.ts";
 import { Doc } from "../../dist/mod.ts";
-import {DocTreeNode} from "../../src/doc.ts";
+// import { Doc } from "https://deno.land/x/doc@v0.1-alpha/mod.ts";
+import type {DocTreeNode} from "../../dist/docContainer.ts";
 
 /** running doc uses default config if no config file exists at project root */
 
@@ -42,7 +43,21 @@ import {DocTreeNode} from "../../src/doc.ts";
 
 /** running doc on a folder should generate documentation for all files in that folder recursively */
 
-const testFolder: string = './test/mocks/testFolder/';
+const testFolder = './test/mocks/testFolder/';
+
+
+Deno.test({
+  name: 'Doc',
+  async fn() {
+    given_testFolderHasMultipleFoldersAndMultipleFilesInEach();
+    const doc: Doc = await when_doc_isRunOnTestFolder();
+    then_doc_shouldGenerateDocumentationForAllTestFilesInside(doc);
+    cleanup_testFolder();
+  },
+  sanitizeResources: false,
+  sanitizeOps: false
+});
+
 
 const given_testFolderHasMultipleFoldersAndMultipleFilesInEach = () => {
   const folder1 = 'folder1/';
@@ -83,6 +98,21 @@ const when_doc_isRunOnTestFolder = async () => {
 }
 
 const then_doc_shouldGenerateDocumentationForAllTestFilesInside = (doc: Doc) => {
+  then_doc_shoudCreateCorrectFolderStructure(doc);
+  then_doc_shouldCreateCorrectSectionsInEachFile(doc);
+  
+}
+
+const cleanup_testFolder = () => {
+  try{
+    Deno.removeSync(testFolder, {recursive: true});
+  } catch (err) {
+    console.log("could not remove folder");
+  }
+}
+
+const then_doc_shoudCreateCorrectFolderStructure = (doc: Doc) => {
+
   const docTree: DocTreeNode[] = doc.getDocTree();
   assert(typeof docTree !== 'undefined');
   assert(docTree.length === 2);
@@ -127,22 +157,6 @@ const then_doc_shouldGenerateDocumentationForAllTestFilesInside = (doc: Doc) => 
   assert(terminationFilesSubfolder23[1].value === 'file2.test.ts');
 }
 
-const cleanup_testFolder = () => {
-  try{
-    Deno.removeSync(testFolder, {recursive: true});
-  } catch (err) {
-    console.log("could not remove folder");
-  }
+const then_doc_shouldCreateCorrectSectionsInEachFile = (doc: Doc) => {
+  // TODO
 }
-
-Deno.test({
-  name: 'Doc',
-  async fn() {
-    given_testFolderHasMultipleFoldersAndMultipleFilesInEach();
-    const doc: Doc = await when_doc_isRunOnTestFolder();
-    then_doc_shouldGenerateDocumentationForAllTestFilesInside(doc);
-    cleanup_testFolder();
-  },
-  sanitizeResources: false,
-  sanitizeOps: false
-});
