@@ -25,7 +25,7 @@ Deno.test({
   async fn () {
     const doc: DocContainer = given_doc_isInitialised();
     await when_populateDocTree_isCalled(doc);
-    console.log(doc);
+    // console.log(doc);
     then_doc_parsesDocFolderStructureAndBuildsADocTreeThatFollowsFilePaths(doc);
   },
   sanitizeOps: false,

@@ -1,7 +1,7 @@
 import { assert } from "https://deno.land/std@0.64.0/testing/asserts.ts";
 import { Doc } from "../../dist/mod.ts";
 // import { Doc } from "https://deno.land/x/doc@v0.1-alpha/mod.ts";
-import {DocTreeNode} from "../../dist/docContainer.ts";
+import type {DocTreeNode} from "../../dist/docContainer.ts";
 
 /** running doc uses default config if no config file exists at project root */
 
