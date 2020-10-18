@@ -99,8 +99,7 @@ const when_doc_isRunOnTestFolder = async () => {
 
 const then_doc_shouldGenerateDocumentationForAllTestFilesInside = (doc: Doc) => {
   then_doc_shoudCreateCorrectFolderStructure(doc);
-  then_doc_shouldCreateCorrectSectionsInEachFile(doc);
-  
+  then_doc_shouldCreateCorrectSectionsInEachFile(doc);  
 }
 
 const cleanup_testFolder = () => {

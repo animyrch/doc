@@ -3,7 +3,7 @@ import { DocElementType, DocTreeNode } from "../../../dist/docContainer.ts";
 import { NodeHandler } from '../../../dist/helpers/NodeHandler.ts';
 
 
-const testStart = "Deno.test({\n        name:";
+const testStart = "Deno.test({\n";
 
 Deno.test({
     name: "TestNode/isStartIndex/valid inputs",
