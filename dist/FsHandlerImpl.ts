@@ -1,6 +1,7 @@
+import { FsHandler } from "./interfaces/FsHandler.ts";
 import { expandGlob } from "https://deno.land/std/fs/mod.ts";
 
-export class FsHandler {
+export class FsHandlerImpl implements FsHandler {
 
   folderStructure: string[] = [];
 

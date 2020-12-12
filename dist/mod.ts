@@ -1,16 +1,14 @@
-import { DocContainer, DocTreeNode } from './docContainer.ts';
-import { FsHandler } from './fsHandler.ts';
+import { DocContainer } from './DocContainer.ts';
+import { DocTreeNode } from "./interfaces/DocTreeNode.ts";
+import { FsHandlerImpl } from './FsHandlerImpl.ts';
 
 export class Doc {
   docContainer?: DocContainer;
   
   public run = async (): Promise<void> => {
-    //const fsHandler = new FsHandler();
-  //  await fsHandler.scanFolder();
-//    this.docContainer = new DocContainer();i
     this.docContainer = DocContainer.getInstance();
-    await this.docContainer.populateDocTree();
-   // this.docContainer.parseSections(); 
+    await this.docContainer.replicateFolderStructure();
+    await this.docContainer.addTestSectionsAndSubSections();
   }
 
   public getDocTree = (): DocTreeNode[] => {

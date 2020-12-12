@@ -1,5 +1,9 @@
 import { assert } from "https://deno.land/std@0.64.0/testing/asserts.ts";
-import { DocContainer, DocElementType } from "../../dist/docContainer.ts";
+import { DocContainer } from "../../dist/DocContainer.ts";
+import { DocElementType } from "../../dist/enums/DocElementType.ts";
+import { DocTreeNode } from "../../dist/interfaces/DocTreeNode.ts";
+import { FileParser } from "../../dist/interfaces/FileParser.ts";
+import { FsHandler } from "../../dist/interfaces/FsHandler.ts";
 
 // MOCK VALUES
 
@@ -9,14 +13,23 @@ const filePaths: string[] = [
   "parent2/secondChild/anotherFile.test.ts"
 ];
 
-class FsHandler {
+class FsHandlerMock implements FsHandler {
   folderStructure: string[] = filePaths;
   async scanFolder(): Promise<void> {
     return;
   }
 }
 
-const fsHandlerMock = new FsHandler();
+class FileParserMock implements FileParser {
+  node?: DocTreeNode;
+  buffer: Uint8Array = new Uint8Array;
+  buildSections(): DocTreeNode | null  {
+    return null;
+  }
+}
+
+const fsHandlerMock = new FsHandlerMock();
+const fileParserMock = new FileParserMock();
 
 // MOCKS END
 
@@ -24,8 +37,7 @@ Deno.test({
   name: "DocContainer/constructor", 
   async fn () {
     const doc: DocContainer = given_doc_isInitialised();
-    await when_populateDocTree_isCalled(doc);
-    // console.log(doc);
+    await when_replicateFolderStructure_isCalled(doc);
     then_doc_parsesDocFolderStructureAndBuildsADocTreeThatFollowsFilePaths(doc);
   },
   sanitizeOps: false,
@@ -35,12 +47,13 @@ Deno.test({
 
 const given_doc_isInitialised = (): DocContainer => {
   return new DocContainer(
-    fsHandlerMock
+    fsHandlerMock,
+    fileParserMock
   );
 }
 
-const when_populateDocTree_isCalled = async (doc: DocContainer): Promise<void> => {
-  await doc.populateDocTree();
+const when_replicateFolderStructure_isCalled = async (doc: DocContainer): Promise<void> => {
+  await doc.replicateFolderStructure();
 }
 
 const then_doc_parsesDocFolderStructureAndBuildsADocTreeThatFollowsFilePaths = (doc: DocContainer): void => {

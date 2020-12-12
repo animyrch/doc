@@ -1,16 +1,18 @@
 import { assert } from "https://deno.land/std@0.64.0/testing/asserts.ts";
 import { parse } from "https://deno.land/std@0.73.0/path/win32.ts";
-import { DocElementType, DocTreeNode } from "../../dist/docContainer.ts";
-import { FileParser } from "../../dist/fileParser.ts";
+import { DocElementType } from "../../dist/enums/DocElementType.ts";
+import { DocTreeNode } from "../../dist/interfaces/DocTreeNode.ts";
+import { FileParserImpl } from "../../dist/FileParserImpl.ts";
+import { FileParser } from "../../dist/interfaces/FileParser.ts";
 import { deepEqual } from "../../dist/helpers/deepEqual.ts";
 
-const fileName = 'test/unit/fileParser_test.ts';
+const fileName = 'test/unit/fileParserImpl_test.ts';
 
 const given_fileParser_initialised = (): FileParser => {
-  return new FileParser();
+  return new FileParserImpl();
 }
 
-const when_getSections_isCalledOnAFileBufferAndAFileNode = (parser: FileParser): DocTreeNode => {
+const when_buildSections_isCalledOnAFileBufferAndAFileNode = (parser: FileParser): DocTreeNode => {
   const file = Deno.openSync(fileName, { read: true });
   const myFileBuffer = Deno.readAllSync(file);
   const myFileNode: DocTreeNode = {
@@ -20,7 +22,7 @@ const when_getSections_isCalledOnAFileBufferAndAFileNode = (parser: FileParser):
   };
   parser.node = myFileNode;
   parser.buffer = myFileBuffer;
-  parser.getSections();
+  parser.buildSections();
   Deno.close(file.rid);
   return myFileNode;
 }
@@ -31,7 +33,7 @@ const then_sectionsAreCreatedForEachTestCase = (updatedFileNode: DocTreeNode) =>
     type: "FILE",
     children: [
       { 
-        value: 'name: "FileParser/getSections",', 
+        value: 'name: "FileParser/buildSections",', 
         type: "SECTION", 
         children: [
           { 
@@ -40,7 +42,7 @@ const then_sectionsAreCreatedForEachTestCase = (updatedFileNode: DocTreeNode) =>
             children: [] 
           },
           {
-            value: "getSections_isCalledOnAFileBufferAndAFileNode(fileParser);",
+            value: "buildSections_isCalledOnAFileBufferAndAFileNode(fileParser);",
             type: "WHEN",
             children: []
           },
@@ -52,7 +54,7 @@ const then_sectionsAreCreatedForEachTestCase = (updatedFileNode: DocTreeNode) =>
         ] 
       },
       { 
-        value: 'name: "FileParser/getSections second time",', 
+        value: 'name: "FileParser/buildSections second time",', 
         type: "SECTION", 
         children: [
           { 
@@ -61,7 +63,7 @@ const then_sectionsAreCreatedForEachTestCase = (updatedFileNode: DocTreeNode) =>
             children: [] 
           },
           {
-            value: "getSections_isCalledOnAFileBufferAndAFileNode(fileParser);",
+            value: "buildSections_isCalledOnAFileBufferAndAFileNode(fileParser);",
             type: "WHEN",
             children: []
           },
@@ -79,10 +81,10 @@ const then_sectionsAreCreatedForEachTestCase = (updatedFileNode: DocTreeNode) =>
 
 
 Deno.test({
-  name: "FileParser/getSections",
+  name: "FileParser/buildSections",
   fn () {
     const fileParser = given_fileParser_initialised();
-    const updatedFileNode = when_getSections_isCalledOnAFileBufferAndAFileNode(fileParser);
+    const updatedFileNode = when_buildSections_isCalledOnAFileBufferAndAFileNode(fileParser);
     then_sectionsAreCreatedForEachTestCase(updatedFileNode);
   },
   sanitizeOps: false,
@@ -91,10 +93,10 @@ Deno.test({
 
 
 Deno.test({
-  name: "FileParser/getSections second time",
+  name: "FileParser/buildSections second time",
   fn () {
     const fileParser = given_fileParser_initialised();
-    const updatedFileNode = when_getSections_isCalledOnAFileBufferAndAFileNode(fileParser);
+    const updatedFileNode = when_buildSections_isCalledOnAFileBufferAndAFileNode(fileParser);
     then_sectionsAreCreatedForEachTestCase(updatedFileNode);
   },
   sanitizeOps: false,

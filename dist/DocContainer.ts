@@ -1,40 +1,33 @@
-import { FsHandler } from "./fsHandler.ts";
+import { FsHandlerImpl } from "./FsHandlerImpl.ts";
+import { FsHandler } from "./interfaces/FsHandler.ts";
+import { FileParserImpl } from "./FileParserImpl.ts";
+import { FileParser } from "./interfaces/FileParser.ts";
+import { DocTreeNode } from "./interfaces/DocTreeNode.ts";
+import { DocElementType } from "./enums/DocElementType.ts";
 
-export enum DocElementType {
-  DocRoot = 'ROOT',
-  DocFolder = 'FOLDER',
-  DocFile = 'FILE',
-  DocSection = 'SECTION',
-  DocGiven = 'GIVEN',
-  DocWhen = 'WHEN',
-  DocThen = 'THEN'
-}
-
-export interface DocTreeNode {
-  value: string,
-  type: DocElementType,
-  children: DocTreeNode[]
-}
 
 export class DocContainer {
 
   fsHandler: FsHandler;
+  fileParser: FileParser;
 
   docTree: DocTreeNode[] = [];
   currentInsertionPoint: DocTreeNode[] = [];
   
   public static getInstance = (): DocContainer => {
     return new DocContainer(
-      new FsHandler
+      new FsHandlerImpl,
+      new FileParserImpl
     );
   }
 
-  constructor (fsHandler: FsHandler) {
+  constructor (fsHandler: FsHandler, fileParser: FileParser) {
     this.fsHandler = fsHandler;
+    this.fileParser = fileParser;
   }
 
 
-  public populateDocTree = async (): Promise<void> => {
+  public replicateFolderStructure = async (): Promise<void> => {
     await this.fsHandler.scanFolder();
     this.fsHandler.folderStructure.map((filePath: string) => {
       const pathSegments: string[] = filePath.split('/');
@@ -108,5 +101,9 @@ export class DocContainer {
 
   private _insertFile = (value: string): number => {
     return this._insertDocNode(value, DocElementType.DocFile);
+  }
+
+  public addTestSectionsAndSubSections = () => {
+    this.fileParser.buildSections()
   }
 }

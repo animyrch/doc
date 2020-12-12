@@ -1,10 +1,11 @@
 import { assert, assertEquals } from "https://deno.land/std@0.64.0/testing/asserts.ts";
-import { FsHandler } from "../../dist/fsHandler.ts";
+import { FsHandlerImpl } from "../../dist/FsHandlerImpl.ts";
+import { FsHandler } from "../../dist/interfaces/FsHandler.ts";
 
 let fsHandler:FsHandler;
 const testFolder = './test/mocks/testFolder/';
 const given_fsIsInstantiated = () => {
-  fsHandler = new FsHandler();
+  fsHandler = new FsHandlerImpl();
 }
 
 const given_testFolderHasTwoFoldersAndTwoSubfoldersInOneOfThemAndOneFileInOneOfThem = () => {
@@ -19,6 +20,7 @@ const given_testFolderHasTwoFoldersAndTwoSubfoldersInOneOfThemAndOneFileInOneOfT
     Deno.mkdirSync(testFolder+folder2, { recursive: true });
     Deno.createSync(testFolder+folder1+subfolder1+file);
   }catch(err){
+    console.log(err);
     console.log('mock folders could not be created or already exists');
   }
 }

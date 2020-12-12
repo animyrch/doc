@@ -1,4 +1,5 @@
-import { DocElementType, DocTreeNode } from "../docContainer.ts";
+import { DocElementType } from "../enums/DocElementType.ts";
+import { DocTreeNode } from "../interfaces/DocTreeNode.ts";
 
 export class NodeHandler {
 

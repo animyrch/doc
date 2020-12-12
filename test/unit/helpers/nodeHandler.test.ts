@@ -1,5 +1,6 @@
 import { assert } from "https://deno.land/std@0.64.0/testing/asserts.ts";
-import { DocElementType, DocTreeNode } from "../../../dist/docContainer.ts";
+import { DocElementType } from "../../../dist/enums/DocElementType.ts";
+import { DocTreeNode } from "../../../dist/interfaces/DocTreeNode.ts";
 import { NodeHandler } from '../../../dist/helpers/NodeHandler.ts';
 
 
