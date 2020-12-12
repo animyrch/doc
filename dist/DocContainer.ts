@@ -7,28 +7,30 @@ import { DocElementType } from "./enums/DocElementType.ts";
 
 
 export class DocContainer {
-
+  searchRoot: string;
   fsHandler: FsHandler;
   fileParser: FileParser;
 
   docTree: DocTreeNode[] = [];
   currentInsertionPoint: DocTreeNode[] = [];
   
-  public static getInstance = (): DocContainer => {
+  public static getInstance = (searchRoot: string): DocContainer => {
     return new DocContainer(
+      searchRoot,
       new FsHandlerImpl,
       new FileParserImpl
     );
   }
 
-  constructor (fsHandler: FsHandler, fileParser: FileParser) {
+  constructor (searchRoot: string, fsHandler: FsHandler, fileParser: FileParser) {
+    this.searchRoot = searchRoot;
     this.fsHandler = fsHandler;
     this.fileParser = fileParser;
   }
 
 
   public replicateFolderStructure = async (): Promise<void> => {
-    await this.fsHandler.scanFolder();
+    await this.fsHandler.scanFolder(this.searchRoot);
     this.fsHandler.folderStructure.map((filePath: string) => {
       const pathSegments: string[] = filePath.split('/');
       

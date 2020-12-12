@@ -6,7 +6,8 @@ export class Doc {
   docContainer?: DocContainer;
   
   public run = async (): Promise<void> => {
-    this.docContainer = DocContainer.getInstance();
+    const searchRoot = "/test/mocks/testFolder/";
+    this.docContainer = DocContainer.getInstance(searchRoot);
     await this.docContainer.replicateFolderStructure();
     await this.docContainer.addTestSectionsAndSubSections();
   }

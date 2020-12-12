@@ -47,6 +47,7 @@ Deno.test({
 
 const given_doc_isInitialised = (): DocContainer => {
   return new DocContainer(
+    '',
     fsHandlerMock,
     fileParserMock
   );

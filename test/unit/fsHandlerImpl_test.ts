@@ -26,7 +26,7 @@ const given_testFolderHasTwoFoldersAndTwoSubfoldersInOneOfThemAndOneFileInOneOfT
 }
 
 const when_scanFolder_isCalled = async () => {
-  await fsHandler.scanFolder();
+  await fsHandler.scanFolder('/test/mocks/testFolder/');
 }
 
 const then_fsShouldStoreTestFolderStructureForExistingFiles = () => {
